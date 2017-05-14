@@ -16,7 +16,7 @@ class RulesAPIHandler(Resource):
   def post(self):
 
     json_data = request.get_data()
-    json_data = json.loads(json_data)
+
     json_data = json.loads(json_data)
 
     event = Event(

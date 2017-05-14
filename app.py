@@ -1,5 +1,5 @@
 from flask import Flask
-from flaskp_restful import Resource, Api
+from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext import restful
 
@@ -15,5 +15,5 @@ api.add_resource(RulesAPIHandler, '/api/rules')
 
 if __name__ == '__main__':
   
-  app.run(host='0.0.0.0')
+  app.run(host="0.0.0.0")
   
