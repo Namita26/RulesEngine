@@ -1,0 +1,4 @@
+flask-restful
+flask-mysqldb
+flask-mysql
+Flask-SQLAlchemy
