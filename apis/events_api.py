@@ -11,13 +11,35 @@ from models.events import Event
 from flask import current_app as app
 
 
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
+class AlchemyEncoder(json.JSONEncoder):
+
+  def default(self, obj):
+  
+    if isinstance(obj.__class__, DeclarativeMeta):
+      
+      fields = {}
+      for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+        data = obj.__getattribute__(field)
+        try:
+          json.dumps(data)
+          fields[field] = data
+        except TypeError:
+          fields[field] = None
+      
+      return fields
+
+    return json.JSONEncoder.default(self, obj)
+
+
 class RulesAPIHandler(Resource):
   
   def post(self):
 
-    json_data = request.get_data()
+    payload = request.get_data()
 
-    json_data = json.loads(json_data)
+    json_data = json.loads(payload)
 
     event = Event(
       json_data.get("id"),
@@ -30,8 +52,10 @@ class RulesAPIHandler(Resource):
       json_data.get("properties")
     )
 
-    event.save()
+    xx = event.save()
 
     RulesEngine().execute(json_data)
 
-    return ""
+    xx = json.dumps(event, cls=AlchemyEncoder)
+
+    return {"response": json.loads(xx), "status": "success"}
