@@ -13,7 +13,7 @@ class FeedbackPostedPayment(Rule):
 
     # return True
 
-    return True
+    return False
 
   def execute(self, event):
 
